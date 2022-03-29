@@ -7,6 +7,7 @@ namespace ApiRestHoovers.Models
 {
     public partial class Viaje
     {
+        public int Id { get; set; }
         public int? IdCliente { get; set; }
         public int? IdVehiculo { get; set; }
         public DateTime? FechaViaje { get; set; }

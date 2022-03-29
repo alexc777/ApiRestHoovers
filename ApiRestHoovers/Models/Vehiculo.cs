@@ -7,6 +7,11 @@ namespace ApiRestHoovers.Models
 {
     public partial class Vehiculo
     {
+        public Vehiculo()
+        {
+            Viajes = new HashSet<Viaje>();
+        }
+
         public int Id { get; set; }
         public int? Modelo { get; set; }
         public string Nombre { get; set; }
@@ -17,5 +22,6 @@ namespace ApiRestHoovers.Models
         public DateTime? FechaActualizacion { get; set; }
 
         public virtual TipoVehiculo IdTipoNavigation { get; set; }
+        public virtual ICollection<Viaje> Viajes { get; set; }
     }
 }

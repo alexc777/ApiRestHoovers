@@ -27,6 +27,7 @@ namespace ApiRestHoovers.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=.;Database=HOOVERS;Integrated Security=True;Pooling=False;");
             }
         }
@@ -172,9 +173,11 @@ namespace ApiRestHoovers.Models
 
             modelBuilder.Entity<Viaje>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("VIAJE");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ID");
 
                 entity.Property(e => e.DescripcionViaje)
                     .HasMaxLength(250)
@@ -208,17 +211,17 @@ namespace ApiRestHoovers.Models
                     .HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.IdClienteNavigation)
-                    .WithMany()
+                    .WithMany(p => p.Viajes)
                     .HasForeignKey(d => d.IdCliente)
                     .HasConstraintName("FK_CLIENTE");
 
                 entity.HasOne(d => d.IdDeptoViajeNavigation)
-                    .WithMany()
+                    .WithMany(p => p.Viajes)
                     .HasForeignKey(d => d.IdDeptoViaje)
                     .HasConstraintName("FK_DEPARTAMENTO");
 
                 entity.HasOne(d => d.IdVehiculoNavigation)
-                    .WithMany()
+                    .WithMany(p => p.Viajes)
                     .HasForeignKey(d => d.IdVehiculo)
                     .HasConstraintName("FK_VEHICULO");
             });
