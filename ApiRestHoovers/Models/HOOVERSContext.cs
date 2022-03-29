@@ -67,7 +67,7 @@ namespace ApiRestHoovers.Models
                     .HasColumnName("NOMBRE");
 
                 entity.Property(e => e.Telefono)
-                    .HasMaxLength(10)
+                    .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("TELEFONO");
             });
@@ -175,9 +175,7 @@ namespace ApiRestHoovers.Models
             {
                 entity.ToTable("VIAJE");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.DescripcionViaje)
                     .HasMaxLength(250)
