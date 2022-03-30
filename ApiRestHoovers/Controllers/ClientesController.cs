@@ -21,25 +21,25 @@ namespace ApiRestHoovers.Controllers
         }
 
         // GET: api/Clientes
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
-        {
-            return await _context.Clientes.ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
+        //{
+        //    return await _context.Clientes.ToListAsync();
+        //}
 
         // GET: api/Clientes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Cliente>> GetCliente(int id)
-        {
-            var cliente = await _context.Clientes.FindAsync(id);
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Cliente>> GetCliente(int id)
+        //{
+        //    var cliente = await _context.Clientes.FindAsync(id);
 
-            if (cliente == null)
-            {
-                return NotFound();
-            }
+        //    if (cliente == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return cliente;
-        }
+        //    return cliente;
+        //}
 
         // PUT: api/Clientes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -51,7 +51,16 @@ namespace ApiRestHoovers.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(cliente).State = EntityState.Modified;
+            _context.Entry(new Cliente {
+                Id = id,
+                Nombre = cliente.Nombre,
+                Apellido = cliente.Apellido,
+                Telefono = cliente.Telefono,
+                Estado = cliente.Estado,
+                FechaCreacion = DateTime.Now.AddDays(-1),
+                FechaActualizacion = DateTime.Now
+
+            }).State = EntityState.Modified;
 
             try
             {
@@ -75,12 +84,18 @@ namespace ApiRestHoovers.Controllers
         // POST: api/Clientes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
+        public async Task<String> PostCliente(Cliente cliente)
         {
-            _context.Clientes.Add(cliente);
+            _context.Clientes.Add(new Cliente
+            {
+                Nombre = cliente.Nombre,
+                Apellido = cliente.Apellido,
+                Telefono = cliente.Telefono
+            });
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCliente", new { id = cliente.Id }, cliente);
+            return "Cliente creado exitosamente";
         }
 
         // DELETE: api/Clientes/5
