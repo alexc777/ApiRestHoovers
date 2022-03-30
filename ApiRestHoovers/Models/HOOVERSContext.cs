@@ -206,6 +206,7 @@ namespace ApiRestHoovers.Models
 
                 entity.Property(e => e.ViajeRealizado)
                     .HasColumnName("VIAJE_REALIZADO")
+                    .HasColumnType("int")
                     .HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.IdClienteNavigation)
