@@ -77,7 +77,18 @@ namespace ApiRestHoovers.Controllers
         [HttpPost]
         public async Task<ActionResult<Viaje>> PostViaje(Viaje viaje)
         {
-            _context.Viajes.Add(viaje);
+            _context.Viajes.Add(new Viaje
+            {
+                IdCliente = viaje.IdCliente,
+                IdVehiculo = viaje.IdVehiculo,
+                FechaViaje = viaje.FechaViaje,
+                FechaFin = viaje.FechaFin,
+                IdDeptoViaje = viaje.IdDeptoViaje,
+                DescripcionViaje = viaje.DescripcionViaje,
+                ViajeRealizado = viaje.ViajeRealizado,
+                PrecioViaje = viaje.PrecioViaje
+            }
+            );
             try
             {
                 await _context.SaveChangesAsync();
