@@ -21,25 +21,25 @@ namespace ApiRestHoovers.Controllers
         }
 
         // GET: api/Vehiculo
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Vehiculo>>> GetVehiculos()
-        {
-            return await _context.Vehiculos.ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Vehiculo>>> GetVehiculos()
+        //{
+        //    return await _context.Vehiculos.ToListAsync();
+        //}
 
         // GET: api/Vehiculo/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Vehiculo>> GetVehiculo(int id)
-        {
-            var vehiculo = await _context.Vehiculos.FindAsync(id);
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Vehiculo>> GetVehiculo(int id)
+        //{
+        //    var vehiculo = await _context.Vehiculos.FindAsync(id);
 
-            if (vehiculo == null)
-            {
-                return NotFound();
-            }
+        //    if (vehiculo == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return vehiculo;
-        }
+        //    return vehiculo;
+        //}
 
         // PUT: api/Vehiculo/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -75,12 +75,17 @@ namespace ApiRestHoovers.Controllers
         // POST: api/Vehiculo
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Vehiculo>> PostVehiculo(Vehiculo vehiculo)
+        public async Task<String> PostVehiculo(Vehiculo vehiculo)
         {
-            _context.Vehiculos.Add(vehiculo);
+            _context.Vehiculos.Add( new Vehiculo { 
+                Modelo = vehiculo.Modelo,
+                Nombre = vehiculo.Nombre,
+                Descripcion = vehiculo.Descripcion,
+                IdTipo = vehiculo.IdTipo
+            });
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetVehiculo", new { id = vehiculo.Id }, vehiculo);
+            return "Vehiculo creado exitosament";
         }
 
         // DELETE: api/Vehiculo/5
