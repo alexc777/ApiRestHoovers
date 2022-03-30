@@ -51,7 +51,17 @@ namespace ApiRestHoovers.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(vehiculo).State = EntityState.Modified;
+            _context.Entry(new Vehiculo
+            {
+                Id = vehiculo.Id,
+                Modelo = vehiculo.Modelo,
+                Nombre = vehiculo.Nombre,
+                Descripcion = vehiculo.Descripcion,
+                IdTipo = vehiculo.IdTipo,
+                Estado = vehiculo.Estado,
+                FechaCreacion = DateTime.Now.AddDays(-1),
+                FechaActualizacion = DateTime.Now
+            }).State = EntityState.Modified;
 
             try
             {
