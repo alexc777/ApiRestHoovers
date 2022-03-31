@@ -98,6 +98,50 @@ namespace ApiRestHoovers.Controllers
             return "Cliente creado exitosamente";
         }
 
+
+        [HttpPost("Masivo")]
+        public ActionResult<IEnumerable<Cliente>> AddUsuario(List<Cliente> Usuario)
+        {
+            List<Cliente> guardados = new List<Cliente>();
+            if (Usuario != null)
+            {
+                foreach (var item in Usuario)
+                {
+                    if (item != null)
+                    {
+                        _context.Clientes.Add(new Cliente
+                        {
+                            Nombre = item.Nombre,
+                            Apellido = item.Apellido,
+                            Telefono = item.Telefono
+                        });
+
+                        guardados.Add(item);
+                        //_context.SaveChanges();
+
+
+                    }
+                }
+                if (guardados.Count > 0)
+                {
+                    _context.SaveChanges();
+                    return Ok(guardados);
+                }
+                else
+                {
+                    return NotFound("No se pudieron agregar los Usuarios" + guardados.Count);
+                }
+            }
+            else
+            {
+                return BadRequest("No se recibió información para almacenar");
+            }
+        }
+
+
+
+
+
         // DELETE: api/Clientes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
