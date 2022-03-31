@@ -32,11 +32,44 @@ namespace ApiRestHoovers.Controllers
         }
 
         [HttpGet]
+        [Route("infoReport")]
+        public ActionResult<List<ReporteVista>> GetInfoReport()
+        {
+            var clienteService = new ClienteService();
+            List<ReporteVista> report = clienteService.GetReportAll();
+
+            return Ok(report);
+        }
+
+        [HttpGet]
         [Route("viajesPorCliente")]
         public ActionResult<List<TotalViaje>> GetTotal(string idCliente, string precio)
         {
             var clienteService = new ClienteService();
             return Ok(clienteService.getTotalViajes(idCliente, precio));
+        }
+
+        [HttpGet]
+        [Route("viajesByIdAndDates")]
+        public ActionResult<List<ViajesByIdDates>> GetReportOne(int idCliente, string fechaInicio, string fechaFin)
+        {
+            var clienteService = new ClienteService();
+            return Ok(clienteService.getTotalViajesIdClientAndDates(idCliente, fechaInicio, fechaFin));
+        }
+
+        [HttpGet]
+        [Route("GetViajesByDates")]
+        public ActionResult<List<ViajesYearMothTotals>> GetReportTwo(string fechaInicio, string fechaFin)
+        {
+            var clienteService = new ClienteService();
+            {
+                var cliente = clienteService.getTotalViajesByDates(fechaInicio, fechaFin);
+                if (cliente != null)
+                {
+                    return Ok(cliente);
+                }
+                return NotFound("Error: No existen viajes en este rango de fechas");
+            }
         }
 
         // PUT: api/Clientes/5
