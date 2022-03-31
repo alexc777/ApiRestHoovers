@@ -98,6 +98,47 @@ namespace ApiRestHoovers.Controllers
             return "Vehiculo creado exitosament";
         }
 
+        [HttpPost("Masivo")]
+        public ActionResult<IEnumerable<Vehiculo>> AddUsuario(List<Vehiculo> Usuario)
+        {
+            List<Vehiculo> guardados = new List<Vehiculo>();
+            if (Usuario != null)
+            {
+                foreach (var item in Usuario)
+                {
+                    if (item != null)
+                    {
+                        _context.Vehiculos.Add(new Vehiculo
+                        {
+                            Modelo = item.Modelo,
+                            Nombre = item.Nombre,
+                            Descripcion = item.Descripcion,
+                            IdTipo = item.IdTipo
+                        });
+
+                        guardados.Add(item);
+                        //_context.SaveChanges();
+
+
+                    }
+                }
+                if (guardados.Count > 0)
+                {
+                    _context.SaveChanges();
+                    return Ok(guardados);
+                }
+                else
+                {
+                    return NotFound("No se pudieron agregar los Usuarios" + guardados.Count);
+                }
+            }
+            else
+            {
+                return BadRequest("No se recibió información para almacenar");
+            }
+        }
+
+
         // DELETE: api/Vehiculo/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehiculo(int id)

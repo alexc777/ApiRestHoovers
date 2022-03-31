@@ -108,6 +108,52 @@ namespace ApiRestHoovers.Controllers
             return CreatedAtAction("GetViaje", new { id = viaje.Id }, viaje);
         }
 
+
+        [HttpPost("Masivo")]
+        public ActionResult<IEnumerable<Viaje>> AddUsuario(List<Viaje> Usuario)
+        {
+            List<Viaje> guardados = new List<Viaje>();
+            if (Usuario != null)
+            {
+                foreach (var item in Usuario)
+                {
+                    if (item != null)
+                    {
+                        _context.Viajes.Add(new Viaje
+                        {
+                            IdCliente = item.IdCliente,
+                            IdVehiculo = item.IdVehiculo,
+                            FechaViaje = item.FechaViaje,
+                            FechaFin = item.FechaFin,
+                            IdDeptoViaje = item.IdDeptoViaje,
+                            DescripcionViaje = item.DescripcionViaje,
+                            ViajeRealizado = item.ViajeRealizado,
+                            PrecioViaje = item.PrecioViaje
+                        });
+
+                        guardados.Add(item);
+                        //_context.SaveChanges();
+
+
+                    }
+                }
+                if (guardados.Count > 0)
+                {
+                    _context.SaveChanges();
+                    return Ok(guardados);
+                }
+                else
+                {
+                    return NotFound("No se pudieron agregar los Usuarios" + guardados.Count);
+                }
+            }
+            else
+            {
+                return BadRequest("No se recibió información para almacenar");
+            }
+        }
+
+
         // DELETE: api/Viajes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteViaje(int id)
