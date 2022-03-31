@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiRestHoovers.Models;
+using ApiRestHoovers.Services;
 
 namespace ApiRestHoovers.Controllers
 {
@@ -20,26 +21,23 @@ namespace ApiRestHoovers.Controllers
             _context = context;
         }
 
-        // GET: api/Clientes
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
-        //{
-        //    return await _context.Clientes.ToListAsync();
-        //}
+        [HttpGet]
+        [Route("cliente")]
+        public ActionResult<List<ClienteResult>> Get()
+        {
+            var clienteService = new ClienteService();
+            List<ClienteResult> clientes = clienteService.GetClientes();
 
-        // GET: api/Clientes/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Cliente>> GetCliente(int id)
-        //{
-        //    var cliente = await _context.Clientes.FindAsync(id);
+            return Ok(clientes);
+        }
 
-        //    if (cliente == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return cliente;
-        //}
+        [HttpGet]
+        [Route("viajesPorCliente")]
+        public ActionResult<List<TotalViaje>> GetTotal(string idCliente, string precio)
+        {
+            var clienteService = new ClienteService();
+            return Ok(clienteService.getTotalViajes(idCliente, precio));
+        }
 
         // PUT: api/Clientes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

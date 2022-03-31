@@ -12,7 +12,5 @@ namespace ApiRestHoovers.Models
         public String Apellido { get; set; }
         public String Telefono { get; set; }
         public int? Estado { get; set; }
-        public String FechaCreacion { get; set; }
-        public String FechaActualizacion { get; set; }
     }
 }
