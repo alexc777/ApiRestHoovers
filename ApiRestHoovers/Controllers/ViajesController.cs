@@ -96,12 +96,12 @@ namespace ApiRestHoovers.Controllers
         }
 
         [HttpPost("Masivo")]
-        public ActionResult<IEnumerable<Viaje>> AddUsuario(List<Viaje> Usuario)
+        public ActionResult<IEnumerable<Viaje>> AddViajeMasivo(List<Viaje> Viaje)
         {
             List<Viaje> guardados = new List<Viaje>();
-            if (Usuario != null)
+            if (Viaje != null)
             {
-                foreach (var item in Usuario)
+                foreach (var item in Viaje)
                 {
                     if (item != null)
                     {
