@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiRestHoovers.Models;
+using ApiRestHoovers.Services;
 
 namespace ApiRestHoovers.Controllers
 {
@@ -20,25 +21,11 @@ namespace ApiRestHoovers.Controllers
             _context = context;
         }
 
-        // GET: api/Viajes
+        //GET: api/Viajes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Viaje>>> GetViajes()
         {
             return await _context.Viajes.ToListAsync();
-        }
-
-        // GET: api/Viajes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Viaje>> GetViaje(int id)
-        {
-            var viaje = await _context.Viajes.FindAsync(id);
-
-            if (viaje == null)
-            {
-                return NotFound();
-            }
-
-            return viaje;
         }
 
         // PUT: api/Viajes/5
@@ -108,7 +95,6 @@ namespace ApiRestHoovers.Controllers
             return CreatedAtAction("GetViaje", new { id = viaje.Id }, viaje);
         }
 
-
         [HttpPost("Masivo")]
         public ActionResult<IEnumerable<Viaje>> AddUsuario(List<Viaje> Usuario)
         {
@@ -152,7 +138,6 @@ namespace ApiRestHoovers.Controllers
                 return BadRequest("No se recibió información para almacenar");
             }
         }
-
 
         // DELETE: api/Viajes/5
         [HttpDelete("{id}")]

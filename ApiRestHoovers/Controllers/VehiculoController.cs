@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiRestHoovers.Models;
+using ApiRestHoovers.Services;
 
 namespace ApiRestHoovers.Controllers
 {
@@ -20,26 +21,14 @@ namespace ApiRestHoovers.Controllers
             _context = context;
         }
 
-        // GET: api/Vehiculo
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Vehiculo>>> GetVehiculos()
-        //{
-        //    return await _context.Vehiculos.ToListAsync();
-        //}
+        [HttpGet]
+        public ActionResult<List<VehiculoResult>> Get()
+        {
+            var vehiculoService = new ClienteService();
+            List<VehiculoResult> clientes = vehiculoService.GetVehiculos();
 
-        // GET: api/Vehiculo/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Vehiculo>> GetVehiculo(int id)
-        //{
-        //    var vehiculo = await _context.Vehiculos.FindAsync(id);
-
-        //    if (vehiculo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return vehiculo;
-        //}
+            return Ok(clientes);
+        }
 
         // PUT: api/Vehiculo/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -137,7 +126,6 @@ namespace ApiRestHoovers.Controllers
                 return BadRequest("No se recibió información para almacenar");
             }
         }
-
 
         // DELETE: api/Vehiculo/5
         [HttpDelete("{id}")]

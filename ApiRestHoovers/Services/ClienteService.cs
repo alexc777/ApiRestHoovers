@@ -12,16 +12,6 @@ namespace ApiRestHoovers.Services
     {
         private SqlConnection _Conn = new SqlConnection();
 
-        public List<ClienteResult> GetClientes()
-        {
-            _Conn = SqlService.GetSqlConnection();
-            _Conn.Open();
-            List<ClienteResult> result = _Conn.Query<ClienteResult>("SELECT * FROM CLIENTE").Where(x => x.Estado == 1).ToList();
-            _Conn.Close();
-            return result;
-        }
-
-        
         public List<TotalViaje> getTotalViajes(string idCliente)
         {
             
@@ -85,8 +75,6 @@ namespace ApiRestHoovers.Services
             }
         }
 
-
-
         public string nullToString(string? value)
         {
             if (value == null) return "NULL";
@@ -100,6 +88,32 @@ namespace ApiRestHoovers.Services
         }
 
 
+        public List<ClienteResult> GetClientes()
+        {
+            _Conn = SqlService.GetSqlConnection();
+            _Conn.Open();
+            List<ClienteResult> result = _Conn.Query<ClienteResult>("SELECT * FROM CLIENTE").Where(x => x.Estado == 1).ToList();
+            _Conn.Close();
+            return result;
+        }
+
+        public List<VehiculoResult> GetVehiculos()
+        {
+            _Conn = SqlService.GetSqlConnection();
+            _Conn.Open();
+            List<VehiculoResult> result = _Conn.Query<VehiculoResult>("SELECT * FROM VEHICULO").Where(x => x.Estado == 1).ToList();
+            _Conn.Close();
+            return result;
+        }
+
+        public List<ViajeResult> GetViajes()
+        {
+            _Conn = SqlService.GetSqlConnection();
+            _Conn.Open();
+            List<ViajeResult> result = _Conn.Query<ViajeResult>("SELECT * FROM VIAJE").ToList();
+            _Conn.Close();
+            return result;
+        }
 
     }
 }

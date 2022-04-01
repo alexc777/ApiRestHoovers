@@ -31,56 +31,6 @@ namespace ApiRestHoovers.Controllers
             return Ok(clientes);
         }
 
-        [HttpGet]
-        [Route("infoReport")]
-        public ActionResult<List<ReporteVista>> GetInfoReport()
-        {
-            var clienteService = new ClienteService();
-            List<ReporteVista> report = clienteService.GetReportAll();
-
-            return Ok(report);
-        }
-
-       
-        [HttpGet]
-        [Route("viajesPorCliente")]
-        public ActionResult<List<TotalViaje>> GetTotal(string idCliente)
-        {
-            var clienteService = new ClienteService();
-            return Ok(clienteService.getTotalViajes(idCliente));
-        }
-
-        [HttpGet]
-        [Route("viajesPorDepartamento")]
-        public ActionResult<List<TotalViaje>> GetTotalDepto(string id_departamento)
-        {
-            var clienteService = new ClienteService();
-            return Ok(clienteService.getTotalViajesDepto(id_departamento));
-        }
-
-        [HttpGet]
-        [Route("viajesByIdAndDates")]
-        public ActionResult<List<ViajesByIdDates>> GetReportOne(string idCliente, string fechaInicio, string fechaFin)
-        {
-            var clienteService = new ClienteService();
-            return Ok(clienteService.getTotalViajesIdClientAndDates(idCliente, fechaInicio, fechaFin));
-        }
-
-        [HttpGet]
-        [Route("GetViajesByDates")]
-        public ActionResult<List<ViajesYearMothTotals>> GetReportTwo(string fechaInicio, string fechaFin)
-        {
-            var clienteService = new ClienteService();
-            {
-                var cliente = clienteService.getTotalViajesByDates(fechaInicio, fechaFin);
-                if (cliente != null)
-                {
-                    return Ok(cliente);
-                }
-                return NotFound("Error: No existen viajes en este rango de fechas");
-            }
-        }
-
         // PUT: api/Clientes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -138,7 +88,6 @@ namespace ApiRestHoovers.Controllers
             return "Cliente creado exitosamente";
         }
 
-
         [HttpPost("Masivo")]
         public ActionResult<IEnumerable<Cliente>> AddUsuario(List<Cliente> Usuario)
         {
@@ -177,10 +126,6 @@ namespace ApiRestHoovers.Controllers
                 return BadRequest("No se recibió información para almacenar");
             }
         }
-
-
-
-
 
         // DELETE: api/Clientes/5
         [HttpDelete("{id}")]
