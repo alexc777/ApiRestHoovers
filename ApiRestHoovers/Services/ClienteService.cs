@@ -73,7 +73,7 @@ namespace ApiRestHoovers.Services
             _Conn = SqlService.GetSqlConnection();
             _Conn.Open();
             var result = _Conn.Query<ViajesYearMothTotals>("SELECT YEAR(FECHA_VIAJE) ANIO, MONTH(FECHA_VIAJE) MES, COUNT(1) VIAJES FROM VW_VIAJE_CLIENTE " +
-                   "WHERE FECHA_VIAJE BETWEEN '" + fechaInicio + "' AND '" + fechaFin + "' " +
+                   "WHERE FECHA_VIAJE BETWEEN ISNULL(" + nullToStringDate(fechaInicio) + ", FECHA_VIAJE) AND ISNULL(" + nullToStringDate(fechaFin) + ", FECHA_FIN)" +
                    "GROUP BY YEAR(FECHA_VIAJE), MONTH(FECHA_VIAJE)").ToList();
 
             if (result.Count != 0)
