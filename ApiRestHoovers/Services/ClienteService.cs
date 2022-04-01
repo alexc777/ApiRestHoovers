@@ -21,38 +21,25 @@ namespace ApiRestHoovers.Services
             return result;
         }
 
-        public List<TotalViaje> getTotalViajes(string idCliente, string precioViaje) {
-            String queryCLiente;
-            String queryViaje;
-            if (idCliente == null)
-            {
-               
-                 queryCLiente =
-                    "where id_cliente = id_cliente ";
-            }
-            else {
-                 queryCLiente =
-                    "where id_cliente = '" + idCliente + "' ";
-            }
-            if (precioViaje == null)
-            {
-               
-                queryViaje =
-                   "v.PRECIO_VIAJE = v.PRECIO_VIAJE ";
-            }
-            else
-            {
-                queryViaje =
-                    "v.PRECIO_VIAJE = '" + precioViaje + "' ";
-            }
+        
+        public List<TotalViaje> getTotalViajes(string idCliente)
+        {
+            
+            _Conn = SqlService.GetSqlConnection();
+            _Conn.Open();
+            var result = _Conn.Query<TotalViaje>("SELECT NOMBRE, COUNT(1) TOTAL FROM VW_VIAJE_CLIENTE"+
+                " WHERE ID_CLIENTE = ISNULL("+ nullToString(idCliente) + ", ID_CLIENTE) GROUP BY NOMBRE").ToList();
+            return result;
+
+        }
+
+        public List<TotalViaje> getTotalViajesDepto(string idDepto)
+        {
 
             _Conn = SqlService.GetSqlConnection();
             _Conn.Open();
-            var result = _Conn.Query<TotalViaje>("select c.NOMBRE as nombre, count(*) as total from VIAJE v " +
-                   "inner join CLIENTE c on c.ID = v.ID_CLIENTE " +
-                    queryCLiente +
-                    "and " + queryViaje+
-                    "group by c.nombre").ToList();
+            var result = _Conn.Query<TotalViaje>("SELECT D.NOMBRE, COUNT(1) TOTAL FROM VIAJE V JOIN DEPARTAMENTO D ON V.ID_DEPTO_VIAJE = D.ID" +
+                " WHERE ID_DEPTO_VIAJE = ISNULL(" + nullToString(idDepto) + ", ID_DEPTO_VIAJE) GROUP BY D.NOMBRE").ToList();
             return result;
 
         }
@@ -66,14 +53,17 @@ namespace ApiRestHoovers.Services
             return result;
         }
 
-        public List<ViajesByIdDates> getTotalViajesIdClientAndDates(int idCliente, string fechaInicio, string fechaFin)
+        public List<ViajesByIdDates> getTotalViajesIdClientAndDates(string idCliente, string fechaInicio, string fechaFin)
         {
             _Conn = SqlService.GetSqlConnection();
             _Conn.Open();
+
             var result = _Conn.Query<ViajesByIdDates>("SELECT NOMBRE AS CLIENTE, COUNT(1) VIAJES FROM VW_VIAJE_CLIENTE " +
-                   "WHERE ID_CLIENTE = " + idCliente +
-                    " AND FECHA_VIAJE BETWEEN  '" + fechaInicio + "' AND '" + fechaFin + "' " +
-                    "GROUP BY NOMBRE").ToList();
+                   "WHERE ID_CLIENTE = ISNULL(" + nullToString(idCliente) + ", ID_CLIENTE)" +
+                    " AND FECHA_VIAJE BETWEEN ISNULL("+ nullToStringDate(fechaInicio) + ", FECHA_VIAJE) AND ISNULL(" + nullToStringDate(fechaFin) + ", FECHA_FIN)"+
+                    " GROUP BY NOMBRE").ToList();
+
+            
             return result;
 
         }
@@ -94,6 +84,21 @@ namespace ApiRestHoovers.Services
                 return null;
             }
         }
+
+
+
+        public string nullToString(string? value)
+        {
+            if (value == null) return "NULL";
+            return value;
+        }
+
+        public string nullToStringDate(string? value)
+        {
+            if (value == null) return "NULL";
+            return "'"+value+"'";
+        }
+
 
 
     }

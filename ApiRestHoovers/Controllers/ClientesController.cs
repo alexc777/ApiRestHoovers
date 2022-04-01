@@ -41,17 +41,26 @@ namespace ApiRestHoovers.Controllers
             return Ok(report);
         }
 
+       
         [HttpGet]
         [Route("viajesPorCliente")]
-        public ActionResult<List<TotalViaje>> GetTotal(string idCliente, string precio)
+        public ActionResult<List<TotalViaje>> GetTotal(string idCliente)
         {
             var clienteService = new ClienteService();
-            return Ok(clienteService.getTotalViajes(idCliente, precio));
+            return Ok(clienteService.getTotalViajes(idCliente));
+        }
+
+        [HttpGet]
+        [Route("viajesPorDepartamento")]
+        public ActionResult<List<TotalViaje>> GetTotalDepto(string id_departamento)
+        {
+            var clienteService = new ClienteService();
+            return Ok(clienteService.getTotalViajesDepto(id_departamento));
         }
 
         [HttpGet]
         [Route("viajesByIdAndDates")]
-        public ActionResult<List<ViajesByIdDates>> GetReportOne(int idCliente, string fechaInicio, string fechaFin)
+        public ActionResult<List<ViajesByIdDates>> GetReportOne(string idCliente, string fechaInicio, string fechaFin)
         {
             var clienteService = new ClienteService();
             return Ok(clienteService.getTotalViajesIdClientAndDates(idCliente, fechaInicio, fechaFin));
