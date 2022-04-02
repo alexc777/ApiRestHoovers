@@ -28,6 +28,24 @@ namespace ApiRestHoovers.Controllers
             var clienteService = new ClienteService();
             List<ReporteVista> report = clienteService.GetReportAll();
 
+            try
+            {
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 5,
+                    IdMethod = 1,
+                    Descripcion = "Se obtiene el listado General del Reporte"
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             return Ok(report);
         }
 
@@ -36,6 +54,25 @@ namespace ApiRestHoovers.Controllers
         public ActionResult<List<TotalViaje>> GetTotal(string idCliente)
         {
             var clienteService = new ClienteService();
+
+            try
+            {
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 5,
+                    IdMethod = 1,
+                    Descripcion = "Reporte de viajes por clienteID " + idCliente
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             return Ok(clienteService.getTotalViajes(idCliente));
         }
 
@@ -44,6 +81,25 @@ namespace ApiRestHoovers.Controllers
         public ActionResult<List<TotalViaje>> GetTotalDepto(string id_departamento)
         {
             var clienteService = new ClienteService();
+
+            try
+            {
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 5,
+                    IdMethod = 1,
+                    Descripcion = "Reporte de viajes por Departamento " + id_departamento
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             return Ok(clienteService.getTotalViajesDepto(id_departamento));
         }
 
@@ -52,6 +108,26 @@ namespace ApiRestHoovers.Controllers
         public ActionResult<List<ViajesByIdDates>> GetReportOne(string idCliente, string fechaInicio, string fechaFin)
         {
             var clienteService = new ClienteService();
+
+            try
+            {
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 5,
+                    IdMethod = 1,
+                    Descripcion = "Reporte de viajes por cliente " + idCliente + " y fechas " + fechaFin + " " + fechaFin
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
             return Ok(clienteService.getTotalViajesIdClientAndDates(idCliente, fechaInicio, fechaFin));
         }
 
@@ -64,6 +140,24 @@ namespace ApiRestHoovers.Controllers
                 var cliente = clienteService.getTotalViajesByDates(fechaInicio, fechaFin);
                 if (cliente != null)
                 {
+                    try
+                    {
+
+                        _context.LogBitacoras.Add(new LogBitacora
+                        {
+                            IdModule = 5,
+                            IdMethod = 1,
+                            Descripcion = "Reporte de viajes por año y mes " + fechaInicio + " " + fechaFin
+                        });
+
+                        _context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
                     return Ok(cliente);
                 }
                 return NotFound("Error: No existen viajes en este rango de fechas");
@@ -79,6 +173,24 @@ namespace ApiRestHoovers.Controllers
                 var marcas = clienteService.GetTopMarcas();
                 if (marcas != null)
                 {
+                    try
+                    {
+
+                        _context.LogBitacoras.Add(new LogBitacora
+                        {
+                            IdModule = 5,
+                            IdMethod = 1,
+                            Descripcion = "Reporte Top 10 por marcas"
+                        });
+
+                        _context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
                     return Ok(marcas);
                 }
                 return NotFound("Error: No existen marcas");
@@ -94,6 +206,23 @@ namespace ApiRestHoovers.Controllers
                 var tipos = clienteService.GetDetalleByTipo();
                 if (tipos != null)
                 {
+                    try
+                    {
+
+                        _context.LogBitacoras.Add(new LogBitacora
+                        {
+                            IdModule = 5,
+                            IdMethod = 1,
+                            Descripcion = "Reporte por tipo vehiculo"
+                        });
+
+                        _context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
                     return Ok(tipos);
                 }
                 return NotFound("Error: No existen tipos");

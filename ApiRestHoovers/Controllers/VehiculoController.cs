@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiRestHoovers.Models;
 using ApiRestHoovers.Services;
+using System.Text.Json;
 
 namespace ApiRestHoovers.Controllers
 {
@@ -26,6 +27,24 @@ namespace ApiRestHoovers.Controllers
         {
             var vehiculoService = new ClienteService();
             List<VehiculoResult> clientes = vehiculoService.GetVehiculos();
+
+            try
+            {
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 2,
+                    IdMethod = 1,
+                    Descripcion = "Se obtiene el listado de Vehiculos"
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             return Ok(clientes);
         }
@@ -84,6 +103,38 @@ namespace ApiRestHoovers.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                try
+                {
+                    var objJSON = new Vehiculo
+                    {
+                        Id = vehiculo.Id,
+                        Modelo = vehiculo.Modelo,
+                        Nombre = vehiculo.Nombre,
+                        Descripcion = vehiculo.Descripcion,
+                        IdTipo = vehiculo.IdTipo,
+                        Estado = vehiculo.Estado,
+                        FechaCreacion = DateTime.Now.AddDays(-1),
+                        FechaActualizacion = DateTime.Now
+
+                    };
+
+                    string jsonString = JsonSerializer.Serialize(objJSON);
+
+                    _context.LogBitacoras.Add(new LogBitacora
+                    {
+                        IdModule = 2,
+                        IdMethod = 3,
+                        Descripcion = jsonString
+                    });
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -112,6 +163,35 @@ namespace ApiRestHoovers.Controllers
                 IdTipo = vehiculo.IdTipo
             });
             await _context.SaveChangesAsync();
+
+            try
+            {
+                var objJSON = new Vehiculo
+                {
+                    Modelo = vehiculo.Modelo,
+                    Nombre = vehiculo.Nombre,
+                    Descripcion = vehiculo.Descripcion,
+                    IdTipo = vehiculo.IdTipo,
+                    FechaCreacion = DateTime.Now.AddDays(-1),
+                    FechaActualizacion = DateTime.Now
+                };
+
+                string jsonString = JsonSerializer.Serialize(objJSON);
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 2,
+                    IdMethod = 2,
+                    Descripcion = jsonString
+                });
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             return "Vehiculo creado exitosament";
         }
@@ -143,6 +223,26 @@ namespace ApiRestHoovers.Controllers
                 if (guardados.Count > 0)
                 {
                     _context.SaveChanges();
+                    
+                    try
+                    {
+                        string jsonString = JsonSerializer.Serialize(guardados);
+
+                        _context.LogBitacoras.Add(new LogBitacora
+                        {
+                            IdModule = 2,
+                            IdMethod = 2,
+                            Descripcion = jsonString
+                        });
+
+                        _context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
                     return Ok(guardados);
                 }
                 else
@@ -168,6 +268,25 @@ namespace ApiRestHoovers.Controllers
 
             _context.Vehiculos.Remove(vehiculo);
             await _context.SaveChangesAsync();
+
+            try
+            {
+                string jsonString = JsonSerializer.Serialize(vehiculo);
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 2,
+                    IdMethod = 4,
+                    Descripcion = jsonString
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             return NoContent();
         }
