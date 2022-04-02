@@ -30,6 +30,35 @@ namespace ApiRestHoovers.Controllers
             return Ok(clientes);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Vehiculo>> GetVehiculo(int? id)
+        {
+            var vehiculo = await _context.Vehiculos.FindAsync(id)
+;
+
+            if (vehiculo == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                //string jsonString = JsonSerializer.Serialize(vehiculo);
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdMethod = 1,
+                    IdModule = 2,
+                    Descripcion = id.ToString()
+                });
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return vehiculo;
+        }
+
         // PUT: api/Vehiculo/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

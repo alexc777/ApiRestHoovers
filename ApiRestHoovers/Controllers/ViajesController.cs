@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiRestHoovers.Models;
 using ApiRestHoovers.Services;
+using System.Text.Json;
 
 namespace ApiRestHoovers.Controllers
 {
@@ -25,6 +26,24 @@ namespace ApiRestHoovers.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Viaje>>> GetViajes()
         {
+            try
+            {
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 3,
+                    IdMethod = 1,
+                    Descripcion = "Se obtiene el listado de Viajes"
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             return await _context.Viajes.ToListAsync();
         }
 
@@ -43,6 +62,38 @@ namespace ApiRestHoovers.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                try
+                {
+                    var objJSON = new Viaje
+                    {
+                        Id = id,
+                        IdCliente = viaje.IdCliente,
+                        IdVehiculo = viaje.IdVehiculo,
+                        FechaViaje = viaje.FechaViaje,
+                        FechaFin = viaje.FechaFin,
+                        PrecioViaje = viaje.PrecioViaje,
+                        IdDeptoViaje = viaje.IdDeptoViaje,
+                        DescripcionViaje = viaje.DescripcionViaje,
+                        ViajeRealizado = viaje.ViajeRealizado
+                    };
+
+                    string jsonString = JsonSerializer.Serialize(objJSON);
+
+                    _context.LogBitacoras.Add(new LogBitacora
+                    {
+                        IdModule = 3,
+                        IdMethod = 3,
+                        Descripcion = jsonString
+                    });
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -79,6 +130,37 @@ namespace ApiRestHoovers.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                try
+                {
+                    //var objJSON = new Viaje
+                    //{
+                    //    IdCliente = viaje.IdCliente,
+                    //    IdVehiculo = viaje.IdVehiculo,
+                    //    FechaViaje = viaje.FechaViaje,
+                    //    FechaFin = viaje.FechaFin,
+                    //    IdDeptoViaje = viaje.IdDeptoViaje,
+                    //    DescripcionViaje = viaje.DescripcionViaje,
+                    //    ViajeRealizado = viaje.ViajeRealizado,
+                    //    PrecioViaje = viaje.PrecioViaje
+                    //};
+
+                    string jsonString = JsonSerializer.Serialize(viaje);
+
+                    _context.LogBitacoras.Add(new LogBitacora
+                    {
+                        IdModule = 3,
+                        IdMethod = 2,
+                        Descripcion = jsonString
+                    });
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
             catch (DbUpdateException)
             {
@@ -92,7 +174,7 @@ namespace ApiRestHoovers.Controllers
                 }
             }
 
-            return CreatedAtAction("GetViaje", new { id = viaje.Id }, viaje);
+            return Ok();
         }
 
         [HttpPost("Masivo")]
@@ -115,6 +197,7 @@ namespace ApiRestHoovers.Controllers
                             DescripcionViaje = item.DescripcionViaje,
                             ViajeRealizado = item.ViajeRealizado,
                             PrecioViaje = item.PrecioViaje
+                            
                         });
 
                         guardados.Add(item);
@@ -126,6 +209,26 @@ namespace ApiRestHoovers.Controllers
                 if (guardados.Count > 0)
                 {
                     _context.SaveChanges();
+
+                    try
+                    {
+                        string jsonString = JsonSerializer.Serialize(guardados);
+
+                        _context.LogBitacoras.Add(new LogBitacora
+                        {
+                            IdModule = 3,
+                            IdMethod = 2,
+                            Descripcion = jsonString
+                        });
+
+                        _context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
                     return Ok(guardados);
                 }
                 else
@@ -151,6 +254,25 @@ namespace ApiRestHoovers.Controllers
 
             _context.Viajes.Remove(viaje);
             await _context.SaveChangesAsync();
+
+            try
+            {
+                string jsonString = JsonSerializer.Serialize(viaje);
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 3,
+                    IdMethod = 4,
+                    Descripcion = jsonString
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             return NoContent();
         }

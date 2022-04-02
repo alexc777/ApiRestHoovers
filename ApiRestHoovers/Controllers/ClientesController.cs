@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiRestHoovers.Models;
 using ApiRestHoovers.Services;
+using System.Text.Json;
 
 namespace ApiRestHoovers.Controllers
 {
@@ -27,6 +28,24 @@ namespace ApiRestHoovers.Controllers
         {
             var clienteService = new ClienteService();
             List<ClienteResult> clientes = clienteService.GetClientes();
+
+            try
+            {
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 1,
+                    IdMethod = 1,
+                    Descripcion = "Se obtiene el listado de clientes"
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             return Ok(clientes);
         }
@@ -55,6 +74,37 @@ namespace ApiRestHoovers.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                try
+                {
+                    var objJSON = new Cliente
+                    {
+                        Id = id,
+                        Nombre = cliente.Nombre,
+                        Apellido = cliente.Apellido,
+                        Telefono = cliente.Telefono,
+                        Estado = cliente.Estado,
+                        FechaCreacion = DateTime.Now.AddDays(-1),
+                        FechaActualizacion = DateTime.Now
+
+                    };
+
+                    string jsonString = JsonSerializer.Serialize(objJSON);
+
+                    _context.LogBitacoras.Add(new LogBitacora
+                    {
+                        IdModule = 1,
+                        IdMethod = 3,
+                        Descripcion = jsonString
+                    });
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -85,6 +135,34 @@ namespace ApiRestHoovers.Controllers
 
             await _context.SaveChangesAsync();
 
+            try
+            {
+                var objJSON = new Cliente
+                {
+                    Nombre = cliente.Nombre,
+                    Apellido = cliente.Apellido,
+                    Telefono = cliente.Telefono,
+                    FechaCreacion = DateTime.Now.AddDays(-1),
+                    FechaActualizacion = DateTime.Now
+                };
+
+                string jsonString = JsonSerializer.Serialize(objJSON);
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 1,
+                    IdMethod = 2,
+                    Descripcion = jsonString
+                });
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             return "Cliente creado exitosamente";
         }
 
@@ -114,6 +192,26 @@ namespace ApiRestHoovers.Controllers
                 if (guardados.Count > 0)
                 {
                     _context.SaveChanges();
+
+                    try
+                    {
+                        string jsonString = JsonSerializer.Serialize(guardados);
+
+                        _context.LogBitacoras.Add(new LogBitacora
+                        {
+                            IdModule = 1,
+                            IdMethod = 2,
+                            Descripcion = jsonString
+                        });
+
+                        _context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
                     return Ok(guardados);
                 }
                 else
@@ -138,6 +236,26 @@ namespace ApiRestHoovers.Controllers
             }
 
             _context.Clientes.Remove(cliente);
+
+            try
+            {
+                string jsonString = JsonSerializer.Serialize(cliente);
+
+                _context.LogBitacoras.Add(new LogBitacora
+                {
+                    IdModule = 1,
+                    IdMethod = 4,
+                    Descripcion = jsonString
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             await _context.SaveChangesAsync();
 
             return NoContent();

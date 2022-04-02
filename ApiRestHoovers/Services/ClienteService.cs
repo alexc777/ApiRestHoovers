@@ -75,6 +75,24 @@ namespace ApiRestHoovers.Services
             }
         }
 
+        public List<ReporteTopResult> GetTopMarcas()
+        {
+            _Conn = SqlService.GetSqlConnection();
+            _Conn.Open();
+            List<ReporteTopResult> result = _Conn.Query<ReporteTopResult>("select TOP 10 V.DESCRIPCION Marca, COUNT(1) Total from LOG_BITACORA B JOIN VEHICULO V ON B.DESCRIPCION = CAST(V.ID AS VARCHAR(MAX)) AND ID_METHOD = 1 GROUP BY V.DESCRIPCION ORDER BY total DESC").ToList();
+            _Conn.Close();
+            return result;
+        }
+
+        public List<ReporteDetalleTipo> GetDetalleByTipo()
+        {
+            _Conn = SqlService.GetSqlConnection();
+            _Conn.Open();
+            List<ReporteDetalleTipo> result = _Conn.Query<ReporteDetalleTipo>("select TP.DESCRIPCION Tipo, V.Modelo, COUNT(1) Consultas from LOG_BITACORA B JOIN VEHICULO V ON B.DESCRIPCION = CAST(V.ID AS VARCHAR(MAX)) AND ID_METHOD = 1  JOIN TIPO_VEHICULO TP ON TP.ID = V.ID_TIPO  GROUP BY TP.DESCRIPCION, V.MODELO  ORDER BY CONSULTAS DESC").ToList();
+            _Conn.Close();
+            return result;
+        }
+
         public string nullToString(string? value)
         {
             if (value == null) return "NULL";

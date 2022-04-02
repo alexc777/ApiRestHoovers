@@ -69,5 +69,35 @@ namespace ApiRestHoovers.Controllers
                 return NotFound("Error: No existen viajes en este rango de fechas");
             }
         }
+
+        [HttpGet]
+        [Route("ReportTopMarcas")]
+        public ActionResult<List<ReporteTopResult>> ReportTopMarcas()
+        {
+            var clienteService = new ClienteService();
+            {
+                var marcas = clienteService.GetTopMarcas();
+                if (marcas != null)
+                {
+                    return Ok(marcas);
+                }
+                return NotFound("Error: No existen marcas");
+            }
+        }
+
+        [HttpGet]
+        [Route("ReportDetallePorTipo")]
+        public ActionResult<List<ReporteDetalleTipo>> ReportDetallePorTipo()
+        {
+            var clienteService = new ClienteService();
+            {
+                var tipos = clienteService.GetDetalleByTipo();
+                if (tipos != null)
+                {
+                    return Ok(tipos);
+                }
+                return NotFound("Error: No existen tipos");
+            }
+        }
     }
 }
